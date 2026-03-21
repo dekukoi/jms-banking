@@ -1,6 +1,7 @@
 import { formatAmount } from '@/lib/utils'
 import React from 'react'
 import AnimatedCountUp from './AnimatedCountUp'
+import DoughnutChart from './DoughnutChart'
 
 const TotalBalanceBox = (
   { accounts = [], totalBanks, totalCurrentBalance }: TotalBalanceBoxProps
@@ -8,7 +9,7 @@ const TotalBalanceBox = (
   return (
     <section className='total-balance'>
       <div className='total-balance-chart'>
-        {/* Doughnut Chart */}
+        <DoughnutChart accounts={accounts} />
       </div>
 
       <div className='flex flex-col gap-6'>
@@ -20,10 +21,10 @@ const TotalBalanceBox = (
             Total Current Balance
           </p>
 
-          <p className='total-balance-amount flex-center gap-2'>
+          <div className='total-balance-amount flex-center gap-2'>
             <AnimatedCountUp amount=
             {totalCurrentBalance}/>
-          </p>
+          </div>
         </div>
       </div>
     </section>
