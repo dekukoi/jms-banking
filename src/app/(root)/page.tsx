@@ -1,4 +1,5 @@
 import HeaderBox from "@/components/HeaderBox";
+import TotalBalanceBox from "@/components/TotalBalanceBox";
 import React from "react";
 
 const Home = () => {
@@ -19,6 +20,12 @@ const Home = () => {
             // This is used where loggedIn might be null (e.g. user is not authenticated yet, or data is still loading from an API).
            //#endregion
             subtext="This is a subtitle"
+          />
+
+          <TotalBalanceBox 
+            accounts={[]}
+            totalBanks={1}
+            totalCurrentBalance={1250.35}
           />
         </header>
       </div>
