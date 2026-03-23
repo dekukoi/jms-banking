@@ -16,9 +16,10 @@ const Sidebar = ({ user }: SiderbarProps) => {
         <Link
           href="/"
           className="mb-12 
-        cursor-pointer 
-        items-center 
-        gap-2"
+          cursor-pointer 
+          items-center
+          gap-2
+          flex"
         >
           <Image
             src="/icons/logo.svg"
@@ -26,7 +27,7 @@ const Sidebar = ({ user }: SiderbarProps) => {
             height={34}
             alt="Horizon Logo"
             className="size-[24px]
-          max-xl:size-1 4"
+            max-xl:size-1 4"
           />
           <h1 className="sidebar-logo">Horizon</h1>
         </Link>
@@ -56,7 +57,9 @@ const Sidebar = ({ user }: SiderbarProps) => {
             </Link>
           );
         })}
+        USER
       </nav>
+      FOOTER
     </section>
   );
 };
