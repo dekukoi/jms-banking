@@ -59,8 +59,7 @@ const MobileNav = ({ user }: MobileNavProps) => {
           </Link>
           <div className="mobilenav-sheet">
             <SheetClose asChild>
-              {" "}
-              // Close the sheet when the user clicks outside of the navigation
+              {/* Close the sheet when the user clicks outside of the navigation */}
               <nav className="flex h-full flex-col gap-6 pt-16 text-white">
                 {sidebarLinks.map((item) => {
                   const isActive =
@@ -69,8 +68,7 @@ const MobileNav = ({ user }: MobileNavProps) => {
 
                   return (
                     <SheetClose asChild key={item.route}>
-                      {" "}
-                      // Close the sheet when a link is clicked
+                      {/* Close the sheet when a link is clicked */}
                       <Link
                         href={item.route}
                         key={item.label}
