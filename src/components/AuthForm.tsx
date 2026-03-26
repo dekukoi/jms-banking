@@ -1,4 +1,4 @@
-'use client'; //Every form is always a client component
+"use client"; //Every form is always a client component
 
 import Image from "next/image";
 import Link from "next/link";
@@ -7,7 +7,7 @@ import React, { useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -16,32 +16,28 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-
-
-const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-})
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import CustomInput from "./CustomInput";
+import { authFormSchema } from "@/lib/utils";
 
 const AuthForm = ({ type }: { type: string }) => {
   const [user, setUser] = useState(null);
 
   // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof authFormSchema>>({
+    resolver: zodResolver(authFormSchema),
     defaultValues: {
-      username: "",
+      email: "",
+      password: "",
     },
-  })
- 
+  });
+
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof authFormSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values)
+    console.log(values);
   }
 
   return (
@@ -64,28 +60,36 @@ const AuthForm = ({ type }: { type: string }) => {
         </Link>
         <div className="flex flex-col gap-2 md:gap-3">
           <h1 className="text-24 lg:text-36 font-semibold text-gray-900">
-            {user
-              ? 'Link Account'
-              : type === 'sign-in'
-                ? 'Sign In'
-                : 'Sign Up'
-            }
+            {user ? "Link Account" : type === "sign-in" ? "Sign In" : "Sign Up"}
             <p className="text-16 font-normal text-gray-600">
               {user
-                ? 'Link your account to get started'
-                : 'Please enter your details'            
-              }
+                ? "Link your account to get started"
+                : "Please enter your details"}
             </p>
           </h1>
         </div>
       </header>
       {user ? (
-        <div className="flex flex-col gap-4">
-          {/* PlaidLink */}
-        </div>
-      ): (
+        <div className="flex flex-col gap-4">{/* PlaidLink */}</div>
+      ) : (
         <>
-          FORM
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <CustomInput
+                control={form.control}
+                name="email"
+                label="email"
+                placeholder="Enter your Email"
+              />
+              <CustomInput
+                control={form.control}
+                name="password"
+                label="password"
+                placeholder="Enter your Password"
+              />
+              <Button type="submit">Submit</Button>
+            </form>
+          </Form>
         </>
       )}
     </section>
