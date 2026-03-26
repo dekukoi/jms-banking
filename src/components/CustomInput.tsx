@@ -15,9 +15,21 @@ import {
 import { Input } from "@/components/ui/input";
 import { authFormSchema } from "@/lib/utils";
 
+const formSchema = authFormSchema('sign-up'); 
+//#region Why we need to pass 'sign-up'
+/*
+CustomInput is a highly reusable component used in both the Sign In and Sign Up forms. 
+To give you nice autocomplete and catch typos (like accidentally typing name="emial"), 
+TypeScript needs to know every valid field name that exists in entire application's authentication flow.
+TLDR: 
+- CustomInput is dumb UI worker who must be prepared for "everything"
+- AuthForm handles the switching logic between sign-in and sign-up
+*/
+//#endregion
+
 interface CustomInput {
-  control: Control<z.infer<typeof authFormSchema>>;
-  name: keyof z.infer<typeof authFormSchema>;
+  control: Control<z.infer<typeof formSchema>>;
+  name: keyof z.infer<typeof formSchema>;
   //#region Extract keys from authFormSchema
   /*
   authFormSchema — your zod schema object
