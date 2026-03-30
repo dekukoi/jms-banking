@@ -1,10 +1,11 @@
 import HeaderBox from "@/components/HeaderBox";
 import RightSidebar from "@/components/RightSidebar";
 import TotalBalanceBox from "@/components/TotalBalanceBox";
+import { getLoggedInUser } from "@/lib/actions/user.actions";
 import React from "react";
 
-const Home = () => {
-  const loggedIn = { firstName: "John", lastName: "Doe", email: "john.doe@example.com" };
+const Home = async () => {
+  const loggedIn = await getLoggedInUser();
 
   return (
     <section className="home">
@@ -12,8 +13,8 @@ const Home = () => {
         <header className="home-header">
           <HeaderBox
             type="greeting"
-            title="welcome"
-            user={loggedIn?.firstName || "Guest"}
+            title="Welcome"
+            user={loggedIn?.name || "Guest"}
             //#region Why use optional chaining (?.) here?            
             // If loggedIn exists → access .firstName
             // If loggedIn is null or undefined → return undefined instead of throwing an error

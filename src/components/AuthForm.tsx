@@ -23,6 +23,7 @@ import { authFormSchema } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import SignUp from "@/app/(auth)/sign-up/page";
 import { useRouter } from "next/navigation";
+import { signIn, signUp } from "@/lib/actions/user.actions";
 
 const AuthForm = ({ type }: { type: string }) => {
   const router = useRouter();
@@ -48,15 +49,15 @@ const AuthForm = ({ type }: { type: string }) => {
       // Sign up with Appwrite & create plaid token
 
       if(type === "sign-up") {
-        // const newUser = await SignUp(data);
-        // setUser(newUser);
+        const newUser = await signUp(data);
+        setUser(newUser);
       }
       if(type === "sign-in") {
-        // const response = await signIn({
-        //   email: data.email,
-        //   password: data.password,
-        // })
-        // if(response) router.push("/");
+        const response = await signIn({
+          email: data.email,
+          password: data.password,
+        })
+        if(response) router.push("/");
       }
     } catch (error) {
       console.error(error);
@@ -119,7 +120,7 @@ const AuthForm = ({ type }: { type: string }) => {
 
                   <CustomInput
                     control={form.control}
-                    name="address"
+                    name="address1"
                     label="Address"
                     placeholder="ex: 123 Main St"
                   />
