@@ -40,13 +40,13 @@ export const signIn = async ({ email, password }: signInProps) => {
   }
 };
 
-export const signUp = async (userData: SignUpParams) => {
-  const { email, password, firstName, lastName } = userData;
+export const signUp = async ({ password, ...userData }: SignUpParams) => {
+  const { email, firstName, lastName } = userData;
   //#region Destructuring syntax
   /*
    const email = userData.email;
-   It looks inside the userData object, finds the properties exactly named email, password, firstName, and lastName, 
-   and creates four brand new const variables holding those exact values. 
+   It looks inside the userData object, finds the properties exactly named email, firstName, and lastName, 
+   and creates 3 brand new const variables holding those exact values. 
   */
   //#endregion
 
@@ -55,10 +55,11 @@ export const signUp = async (userData: SignUpParams) => {
   try {
     const { account, database } = await createAdminClient();
 
+    //Appwrite Auth creates account with password
     newUserAccount = await account.create(
       ID.unique(),
       email,
-      password,
+      password, //hashed and stored in Appwrite auth only
       `${firstName} ${lastName}`,
     );
 
@@ -72,6 +73,8 @@ export const signUp = async (userData: SignUpParams) => {
     if (!dwollaCustomerUrl) throw new Error("Error creating Dwolla customer");
 
     const dwollaCustomerId = extractCustomerIdFromUrl(dwollaCustomerUrl);
+
+    // Stores user data in Appwrite's database
     const newUser = await database.createDocument(
       DATABASE_ID!,
       USER_COLLECTION_ID!,
@@ -84,8 +87,10 @@ export const signUp = async (userData: SignUpParams) => {
       },
     );
 
+    //create cookie-based session
     const session = await account.createEmailPasswordSession(email, password);
 
+    // Store session token in a cookie
     cookies().set("appwrite-session", session.secret, {
       path: "/",
       httpOnly: true,
@@ -137,7 +142,7 @@ export const createLinkToken = async (user: User) => {
       user: {
         client_user_id: user.$id,
       },
-      client_name: user.name,
+      client_name: `${user.firstName} ${user.lastName}`,
       products: ["auth"] as Products[],
       language: "en",
       country_codes: ["US"] as CountryCode[],
@@ -158,7 +163,7 @@ export const createBankAccount = async ({
   accountId,
   accessToken,
   fundingSourceUrl,
-  sharableId,
+  shareableId,
 }: createBankAccountProps) => {
   try {
     const { database } = await createAdminClient();
@@ -176,7 +181,7 @@ export const createBankAccount = async ({
         accountId,
         accessToken,
         fundingSourceUrl,
-        sharableId,
+        shareableId,
       }, // data
       // [ID.custom(userId)], // read permissions (only the user can read their bank account) - optional
     );
@@ -239,7 +244,7 @@ export const exchangePublicToken = async ({
       accountId: accountData.account_id,
       accessToken,
       fundingSourceUrl,
-      sharableId: encryptId(accountData.account_id),
+      shareableId: encryptId(accountData.account_id),
     });
 
     // Revalidate the path to reflect the changes
