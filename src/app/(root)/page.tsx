@@ -1,4 +1,5 @@
 import HeaderBox from "@/components/HeaderBox";
+import RecentTransactions from "@/components/RecentTransactions";
 import RightSidebar from "@/components/RightSidebar";
 import TotalBalanceBox from "@/components/TotalBalanceBox";
 import { getAccounts } from "@/lib/actions/bank.actions";
@@ -6,6 +7,8 @@ import { getLoggedInUser } from "@/lib/actions/user.actions";
 import React from "react";
 
 const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
+  const currentPage = Number(page as string) || 1; 
+  // Converts page param to number from SearchParam since anything in there is a string, finally defaults to page 1. if
   const loggedIn = await getLoggedInUser();
   const accounts = await getAccounts({ userId: loggedIn.$id });
   const accountsData = accounts?.data;
@@ -17,7 +20,7 @@ const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
     accountsData
   });
 
-  const appwriteItemId = (id as string) || accounts?.data[0]?.appwriteItemId;
+  const appwriteItemId = (id as string) || accountsData[0]?.appwriteItemId;
   //#region Explanation: appwriteItemId & Data Flow
   /*
    * 1. WHAT THIS LINE DOES:
@@ -59,18 +62,23 @@ const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
           />
 
           <TotalBalanceBox
-            accounts={accounts?.data}
+            accounts={accountsData}
             totalBanks={accounts?.totalBanks}
             totalCurrentBalance={accounts?.totalCurrentBalance}
           />
         </header>
-        RECENT TRANSACTIONS
+        <RecentTransactions
+          accounts={accountsData}
+          transactions={accounts?.transactions}
+          appwriteItemId={appwriteItemId}
+          page={currentPage}
+        />
       </div>
 
       <RightSidebar
         user={loggedIn}
         transactions={accounts?.transactions}
-        banks={accounts?.data.slice(0, 2)}
+        banks={accountsData.slice(0, 2)}
       />
     </section>
   );
