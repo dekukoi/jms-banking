@@ -2,13 +2,13 @@ import HeaderBox from "@/components/HeaderBox";
 import RecentTransactions from "@/components/RecentTransactions";
 import RightSidebar from "@/components/RightSidebar";
 import TotalBalanceBox from "@/components/TotalBalanceBox";
-import { getAccounts } from "@/lib/actions/bank.actions";
+import { getAccount, getAccounts } from "@/lib/actions/bank.actions";
 import { getLoggedInUser } from "@/lib/actions/user.actions";
 import React from "react";
 
 const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
   const currentPage = Number(page as string) || 1; 
-  // Converts page param to number from SearchParam since anything in there is a string, finally defaults to page 1. if
+  // Converts page param to number from SearchParam since anything in there is a string, finally defaults to page 1.
   const loggedIn = await getLoggedInUser();
   const accounts = await getAccounts({ userId: loggedIn.$id });
   const accountsData = accounts?.data;
@@ -44,6 +44,7 @@ const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
    * So basically, because we labeled the box "data" on the server, we gotta use `.data` here to open it back up lol.
    */
   //#endregion
+  const account = await getAccount({ appwriteItemId });
   return (
     <section className="home">
       <div className="home-content">
@@ -69,7 +70,7 @@ const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
         </header>
         <RecentTransactions
           accounts={accountsData}
-          transactions={accounts?.transactions}
+          transactions={account?.transactions}
           appwriteItemId={appwriteItemId}
           page={currentPage}
         />
@@ -77,7 +78,7 @@ const Home = async ({ searchParams: { id, page } }: SearchParamProps) => {
 
       <RightSidebar
         user={loggedIn}
-        transactions={accounts?.transactions}
+        transactions={account?.transactions}
         banks={accountsData.slice(0, 2)}
       />
     </section>
