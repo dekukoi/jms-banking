@@ -18,6 +18,7 @@ import { usePathname } from "next/navigation";
 
 import React from "react";
 import Footer from "./Footer";
+import PlaidLink from "./PlaidLink";
 
 const MobileNav = ({ user }: MobileNavProps) => {
   const pathName = usePathname();
@@ -97,7 +98,7 @@ const MobileNav = ({ user }: MobileNavProps) => {
                     </SheetClose>
                   );
                 })}
-                USER
+                <PlaidLink user={user} />
               </nav>
             </SheetClose>
             <Footer user={user} type="mobile" />
