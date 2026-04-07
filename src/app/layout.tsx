@@ -2,7 +2,7 @@ export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
 import { Inter, IBM_Plex_Serif } from "next/font/google";
-import "../app/globals.css";
+import "./globals.css";
 import * as Sentry from "@sentry/nextjs";
 
 // Add or edit your "generateMetadata" to include the Sentry trace data:
